@@ -1,14 +1,15 @@
-! n= no of monomers in a chain
-!f_act=active force strength,factor=factor times larger radius of the  passive colloid
+! This code provides a 3D simulation of an active polar filament which has a load at the front.
+! n= no of monomers in a chain, f_act=active force strength,rho=factor which controls the bending stiffness of the load, k_spring=spring constant, k_bend=bending stiffness constant, k_clamp=bending stiffness related to the load, eps=epsilon of the LJ potential, sig=diameter of a monomer, zeta=friction coefficient, xboxl,yboxl,zboxl are the dimension of the simulation box in x, y and z direction respectively, delt=simulation time-step, time_sim=total simulation time
 module polymer_modeling
 implicit none
 save
-integer, parameter :: n = 201 ! no of monomers 
-real(8), parameter :: factor=1.0, f_act = 20.0, rho=0.0
+integer, parameter :: n = 201
+real(8), parameter :: f_act = 20.0, rho=0.0
 real(8), parameter :: k_spring=1000, k_bend=100, k_clamp=rho*k_bend
 real(8), parameter :: PI=3.1415926,eps=1.0, sig=1.0d0,zeta=1.0
 real(8), parameter :: xboxl=n+100,yboxl=n+100,zboxl=n+100, temp=0.1
-real(8), parameter :: delt=0.00001,a=0.5d0*(delt**2), b1=0.5d0*delt
+real(8), parameter :: factor=1.0, delt=0.00001,a=0.5d0*(delt**2), b1=0.5d0*delt
+real(8), parameter :: rc = (2.0d0**(1.0d0/6.0d0))*sig, rc2=rc**2
 integer(kind=8), parameter :: time_sim=nint(500/delt)
 integer(kind=8), parameter :: sav_data=nint(5/delt),time_cut=nint(0/delt)
 real(8) :: sigma(n), fric(n),b(n),rc, rc2
@@ -40,11 +41,6 @@ sigma(i) = sig
 b(i) = fric(i) * temp
 endif
 end do
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!0.5*(sigma(n)+sigma(1)) is taken to consider the maximum
-!interation radius between two particles
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-rc=(2.0d0**(1.0d0/6.0d0))*0.5*(sigma(n)+sigma(1)); rc2=rc**2
 
 call itime(timeArray)
  IF( timeArray(3) .lt. 10 ) then
