@@ -42,17 +42,8 @@ b(i) = fric(i) * temp
 endif
 end do
 
-call itime(timeArray)
- IF( timeArray(3) .lt. 10 ) then
- if( timeArray(3) .eq. 0 ) then
-         JSEED = 100*timeArray(1) + timeArray(2) + 10000
-        else
-         JSEED = 100*timeArray(1) + timeArray(2) + timeArray(3)*10000
-         endif
-        else
-         JSEED = 100*timeArray(1) + timeArray(2) + timeArray(3)*1000
-        endif
- ISEED = - JSEED
+!!!! Seed value for random number generator!!!!!!!!
+ISEED = - 10895
 
 open(32,file='fil_conf.dat')
 
